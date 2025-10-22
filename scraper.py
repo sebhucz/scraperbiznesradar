@@ -1,10 +1,12 @@
 import requests
 from bs4 import BeautifulSoup
 from time import sleep
+import os
 
 BASE_URL = "https://www.biznesradar.pl/notowania/{}#1d_lin_lin"
 INPUT_FILE = "NCFOCUSNAZWY.txt"
-OUTPUT_FILE = "profile_spolek.txt"
+OUTPUT_DIR = "wyniki"
+OUTPUT_FILE = os.path.join(OUTPUT_DIR, "profile_spolek.txt")
 
 def get_company_profile(symbol: str) -> str:
     """Pobiera opis spółki z sekcji Profil działalności."""
@@ -28,6 +30,9 @@ def get_company_profile(symbol: str) -> str:
 
 
 def main():
+    # Upewnij się, że katalog "wyniki" istnieje
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
+
     with open(INPUT_FILE, "r", encoding="utf-8") as f:
         companies = [line.strip() for line in f if line.strip()]
 
@@ -42,14 +47,14 @@ def main():
         except Exception as e:
             results.append(f"=== {symbol} ===\nBłąd: {e}\n")
 
-        # Krótka pauza, żeby nie przeciążyć serwera
+        # Pauza, żeby nie przeciążyć serwera
         sleep(1.5)
 
-    # Zapis wyników
+    # Zapis wyników do pliku w katalogu "wyniki"
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         f.write("\n\n".join(results))
 
-    print(f"\nZapisano wszystkie opisy do pliku {OUTPUT_FILE}")
+    print(f"\nZapisano wszystkie opisy do pliku: {OUTPUT_FILE}")
 
 
 if __name__ == "__main__":
