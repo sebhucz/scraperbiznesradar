@@ -1,4 +1,4 @@
-name: BiznesRadar Scraper
+name: BiznesRadar Multi Scraper
 
 on:
   push:
@@ -28,8 +28,8 @@ jobs:
       - name: Run scraper
         run: python scraper.py
 
-      - name: Upload scraped data as artifact
+      - name: Upload scraped data
         uses: actions/upload-artifact@v4
         with:
-          name: profil_dzialalnosci
-          path: profil_dzialalnosci.txt
+          name: profile_spolek
+          path: profile_spolek.txt
